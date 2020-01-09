@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\25630109053143_ExtendedUserClass.cs" />
+    <Compile Remove="Migrations\25630109053143_ExtendedUserClass.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
