@@ -1,4 +1,5 @@
-﻿using DatingApp.API.Dtos;
+﻿using AutoMapper;
+using DatingApp.API.Dtos;
 using DatingApp.API2.Data;
 using DatingApp.API2.Dtos;
 using DatingApp.API2.Models;
@@ -21,10 +22,12 @@ namespace DatingApp.API2.Controllers
     {
         private readonly IAuthRepository _repository;
         private readonly IConfiguration _config;
+        private readonly IMapper _mapper;
 
-        public AuthController(IAuthRepository repository, IConfiguration config)
+        public AuthController(IAuthRepository repository, IConfiguration config, IMapper mapper)
         {
             _config     = config;
+            _mapper     = mapper;
             _repository = repository;
         }
 
@@ -75,10 +78,9 @@ namespace DatingApp.API2.Controllers
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return Ok(new
-            {
-                token = tokenHandler.WriteToken(token)
-            });
+            var user = _mapper.Map<UserForListDto>(userFromRepository);
+
+            return Ok(new { token = tokenHandler.WriteToken(token), user });
         }
     }
 }
