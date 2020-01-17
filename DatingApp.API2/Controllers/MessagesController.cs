@@ -51,11 +51,16 @@ namespace DatingApp.API2.Controllers
 
             messageParams.UserId = userId;
 
-            var messagesFromRepo = await _repository.GetMessagesForUser(messageParams);
+            var messagesFromRepository = await _repository.GetMessagesForUser(messageParams);
 
-            var messages = _mapper.Map<IEnumerable<MessageToReturnDto>>(messagesFromRepo);
+            var messages = _mapper.Map<IEnumerable<MessageToReturnDto>>(messagesFromRepository);
 
-            Response.AddPagination(messagesFromRepo.CurrentPage, messagesFromRepo.PageSize, messagesFromRepo.TotalCount, messagesFromRepo.TotalPages);
+            Response.AddPagination(
+              messagesFromRepository.CurrentPage,
+              messagesFromRepository.PageSize,
+              messagesFromRepository.TotalCount,
+              messagesFromRepository.TotalPages
+            );
 
             return Ok(messages);
         }
@@ -66,9 +71,9 @@ namespace DatingApp.API2.Controllers
             if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                 return Unauthorized();
 
-            var messageFromRepository = await _repository.GetMessageThread(userId, recipientId);
+            var messagesFromRepository = await _repository.GetMessageThread(userId, recipientId);
 
-            var messageThread = _mapper.Map<IEquatable<MessageForReturnDto>>(messageFromRepository);
+            var messageThread = _mapper.Map<IEnumerable<MessageToReturnDto>>(messagesFromRepository);
 
             return Ok(messageThread);
         }
